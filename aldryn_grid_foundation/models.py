@@ -4,9 +4,16 @@ from functools import partial
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.utils.text import format_lazy
 
 from cms.models import CMSPlugin
+
+try:
+    from django.utils.translation import string_concat
+except ImportError:
+    from django.utils.text import format_lazy
+
+    def string_concat(*strings):
+        return format_lazy('{}' * len(strings), *strings)
 
 
 GRID_CONFIG = {'COLUMNS': 24, 'TOTAL_WIDTH': 960, 'GUTTER': 20}
@@ -14,7 +21,7 @@ GRID_CONFIG.update(getattr(settings, 'ALDRYN_GRID_FOUNDATION_CONFIG', {}))
 
 
 ALDRYN_GRID_FOUNDATION_CHOICES = [
-    (i, format_lazy(str(i), ' ', _('columns'))) for i in range(1, GRID_CONFIG['COLUMNS']+1)
+    (i, string_concat(str(i), ' ', _('columns'))) for i in range(1, GRID_CONFIG['COLUMNS']+1)
 ]
 
 ColumnSizeField = partial(
@@ -30,6 +37,7 @@ CMSPluginField = partial(
     to=CMSPlugin,
     related_name='%(app_label)s_%(class)s',
     parent_link=True,
+    on_delete=models.deletion.CASCASE
 )
 
 
