@@ -37,7 +37,7 @@ CMSPluginField = partial(
     to=CMSPlugin,
     related_name='%(app_label)s_%(class)s',
     parent_link=True,
-    on_delete=models.deletion.CASCASE
+    on_delete=models.CASCADE
 )
 
 
