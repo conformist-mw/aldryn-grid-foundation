@@ -3,7 +3,8 @@ from functools import partial
 
 from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _, string_concat
+from django.utils.translation import ugettext_lazy as _
+from django.utils.text import format_lazy
 
 from cms.models import CMSPlugin
 
@@ -13,7 +14,7 @@ GRID_CONFIG.update(getattr(settings, 'ALDRYN_GRID_FOUNDATION_CONFIG', {}))
 
 
 ALDRYN_GRID_FOUNDATION_CHOICES = [
-    (i, string_concat(str(i), ' ', _('columns'))) for i in range(1, GRID_CONFIG['COLUMNS']+1)
+    (i, format_lazy(str(i), ' ', _('columns'))) for i in range(1, GRID_CONFIG['COLUMNS']+1)
 ]
 
 ColumnSizeField = partial(
